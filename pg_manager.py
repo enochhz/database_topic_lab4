@@ -50,6 +50,17 @@ class PostgreSQLManger():
         for row in rows:
             print(row)
     
+    def query_test(self):
+        self.cur.execute("SELECT WagesPerHour * NumberOfHours FROM Assignment2")
+        rows = self.cur.fetchall()
+        for row in rows:
+            print(row[0])
+        
+        self.cur.execute("SELECT AssignedProjects FROM EmpAss1")
+        rows = self.cur.fetchall()
+        for row in rows:
+            print(row[0])
+    
     def print_cur(self):
         print(self.cur)
     
