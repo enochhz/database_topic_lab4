@@ -146,6 +146,10 @@ tables_dic[projectlist1_table]["data"].append({
     "IDP": 1,
     "NumberOfHours": 10
 })
+tables_dic[projectlist1_table]["data"].append({
+    "IDP": 3,
+    "NumberOfHours": 15, 
+})
 tables_dic[projectlist2_table]["data"].append({
     "IDP": 1,
     "Title": "'Bitsplanet'" ,
