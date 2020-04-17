@@ -6,15 +6,12 @@ class PostgreSQLManger():
     conn.autocommit = True
     cur = conn.cursor()
 
-    def init(self):
-        print('1')
+    def drop_table(self, table1):
+        self.cur.execute(f"DROP TABLE IF EXISTS {table1}")
 
     def init_table(self, table1, fields_dic): # Drop and create table
         self.drop_table(table1)
         self.create_table(table1, fields_dic)
-
-    def drop_table(self, table1):
-        self.cur.execute(f"DROP TABLE IF EXISTS {table1}")
 
     def create_table(self, table1, fields_dic):
         sql = f"CREATE TABLE {table1}("
@@ -23,7 +20,10 @@ class PostgreSQLManger():
         for key, value in fields_dic.items():
             if value[1]:
                 primary_key.append(key)
-            fields += f"{key} {value[0]},"
+            if len(value) > 2:
+                fields += f"{key} {value[0]} REFERENCES {value[2]}, " # field_name INTEGER REFERENCES table(field),
+            else:
+                fields += f"{key} {value[0]}," # field_name INTEGER,
         if len(primary_key) > 0:
             primary_key_string = ', '.join(primary_key)
             sql += fields + "PRIMARY KEY (" + primary_key_string
