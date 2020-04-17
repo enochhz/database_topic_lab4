@@ -14,6 +14,6 @@ postgresSQLManager = PostgreSQLManger()
 #print("===== sum of type array =====")
 #postgresSQLManager.query_selector("SELECT SUM(NumberOfHours) FROM (SELECT (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) AS ProjectLists")
 print("===== query3 =====")
-postgresSQLManager.query_selector("SELECT Emp.Name, SUM(NumberOfHours) * Emp.WagesPerHour " + 
-                                  "FROM Employee Emp LEFT JOIN (SELECT IDE, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss ON Emp.IDE = EmpAss.IDE " +
-                                  "GROUP BY Emp.IDE")
+postgresSQLManager.query_selector("SELECT IDE, Name, SUM(NumberOfHours) * WagesPerHour " + 
+                                  "FROM (SELECT IDE, Name, WagesPerHour, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss " +
+                                  "GROUP BY IDE, Name, WagesPerHour")
