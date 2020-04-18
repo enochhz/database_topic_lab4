@@ -1,19 +1,34 @@
 from pg_manager import PostgreSQLManger
+import time
 
 postgresSQLManager = PostgreSQLManger()
+def query_runner(query_name, sql_query):
+    print(f"===== {query_name} =====")
+    start_time = time.time()
+    postgresSQLManager.run_query(sql_query)
+    print(f"Run time(seconds): {time.time() - start_time}")
 
-#postgresSQLManager.query_selector("SELECT WagesPerHour * NumberOfHours FROM Assignment2")
-#postgresSQLManager.query_selector("SELECT AssignedProjects FROM EmpAss1")
-#postgresSQLManager.query_selector("SELECT * FROM ProjectList1 WHERE IDP IN (SELECT AssignedProjects[1].IDP FROM EmpAss1)")
-#postgresSQLManager.query_selector("SELECT AssignedProjects[2].IDP FROM EmpAss1")
-#postgresSQLManager.query_selector("SELECT AssignedProjects FROM EmpAss1")
-#postgresSQLManager.query_selector("SELECT unnest(AssignedProjects) FROM EmpAss1")
-#postgresSQLManager.query_selector("SELECT SUM(NumberOfHours) FROM ProjectList1 WHERE IDP IN (SELECT (unnest(AssignedProjects)::ProjectList1).IDP FROM EmpAss1)")
-#print("===== test1 =====")
-#postgresSQLManager.query_selector("SELECT (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1")
-#print("===== sum of type array =====")
-#postgresSQLManager.query_selector("SELECT SUM(NumberOfHours) FROM (SELECT (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) AS ProjectLists")
-print("===== query3 =====")
-postgresSQLManager.query_selector("SELECT IDE, Name, SUM(NumberOfHours) * WagesPerHour " + 
-                                  "FROM (SELECT IDE, Name, WagesPerHour, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss " +
-                                  "GROUP BY IDE, Name, WagesPerHour")
+query_runner("query1", "SELECT Employee.IDE, SUM(Assignment1.NumberOfHours) * WagesPerHour " + 
+            "FROM Employee LEFT JOIN Assignment1 ON  Employee.IDE = Assignment1.IDE Group By Employee.IDE, Employee.Name, Employee.WagesPerHour"); 
+query_runner("query2", "SELECT IDE, SUM(NumberOfHours) * WagesPerHour " + 
+            "FROM (SELECT IDE, WagesPerHour, (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) As EmpAss " + 
+            "GROUP BY IDE, WagesPerHour")
+
+query_runner("query3", "SELECT IDE, Name, SUM(NumberOfHours) * WagesPerHour " + 
+            "FROM (SELECT IDE, Name, WagesPerHour, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss " +
+            "GROUP BY IDE, Name, WagesPerHour")
+query_runner("query4", "SELECT IDE, Name, SUM(Assignment2.NumberOfHours) * WagesPerHour FROM Assignment2 Group By IDE, Name, WagesPerHour"); 
+
+query_runner("query5", "SELECT Employee.IDE, Employee.Name, Project.IDP, Project.Title, Employee.WagesPerHour * Assignment1.NumberOfHours " + 
+            "FROM Employee LEFT JOIN Assignment1 INNER JOIN Project ON Assignment1.IDP = Project.IDP ON Assignment1.IDE = Employee.IDE " +
+            "GROUP BY Employee.IDE, Project.IDP, Assignment1.NumberOfHours" )
+query_runner("query6", "SELECT IDE, Name, IDP, Title, WagesPerHour * NumberOfHours " + 
+            "FROM Assignment2 GROUP BY IDE, IDP")
+
+query_runner("query7", "SELECT IDE, Name, IDP, Title, SUM(NumberOfHours) * WagesPerHour " + 
+            "FROM (SELECT IDE, Name, WagesPerHour, " + 
+            "(unnest(AssignedProjects)::ProjectList2).IDP, (unnest(AssignedProjects)::ProjectList2).Title, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss " + 
+            "GROUP BY IDE, Name, IDP, Title, WagesPerHour")
+query_runner("query8", "SELECT Employee.IDE, Employee.Name, EmpAss.IDP, SUM(EmpAss.NumberOfHours) * Employee.WagesPerHour " + 
+            "FROM Employee LEFT JOIN (SELECT IDE, WagesPerHour, (unnest(AssignedProjects)::ProjectList1).IDP, (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) As EmpAss ON Employee.IDE = EmpAss.IDE " + 
+            "GROUP BY Employee.IDE, Employee.WagesPerHour, EmpAss.IDP")

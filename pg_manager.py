@@ -50,7 +50,7 @@ class PostgreSQLManger():
         for row in rows:
             print(row)
     
-    def query_selector(self, sql_query):
+    def run_query(self, sql_query):
         self.cur.execute(sql_query)
         rows = self.cur.fetchall()
         for row in rows:
