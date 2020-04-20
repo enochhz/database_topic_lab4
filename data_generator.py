@@ -122,7 +122,7 @@ Data Initialization
 '''
 #  Employee
 employees = {} 
-for i in range(100):
+for i in range(10):
     employees[i] = {} 
     employees[i] = {
         "IDE": i,
@@ -147,7 +147,7 @@ start_date = datetime.date(2020, 1, 1)
 end_date = datetime.date(2020, 12, 30)
 time_between_dates = end_date - start_date
 days_between_dates = time_between_dates.days
-for i in range(100):
+for i in range(10):
     random_number_of_days = random.randrange(days_between_dates)
     random_date = start_date + datetime.timedelta(days=random_number_of_days)
     projects[i] = {}
