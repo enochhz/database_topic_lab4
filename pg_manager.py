@@ -56,8 +56,5 @@ class PostgreSQLManger():
         for row in rows:
             print(row)
     
-    def print_cur(self):
-        print(self.cur)
-    
     def close(self):
         self.conn.close()

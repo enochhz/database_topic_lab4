@@ -122,7 +122,7 @@ Data Initialization
 '''
 #  Employee
 employees = {} 
-for i in range(10):
+for i in range(100):
     employees[i] = {} 
     employees[i] = {
         "IDE": i,
@@ -147,7 +147,7 @@ start_date = datetime.date(2020, 1, 1)
 end_date = datetime.date(2020, 12, 30)
 time_between_dates = end_date - start_date
 days_between_dates = time_between_dates.days
-for i in range(10):
+for i in range(100):
     random_number_of_days = random.randrange(days_between_dates)
     random_date = start_date + datetime.timedelta(days=random_number_of_days)
     projects[i] = {}
@@ -188,30 +188,6 @@ for employee_id, assigned_projects in employees_assignments.items():
             "Title": projects[project["IDP"]]["Title"],
             "NumberOfHours": project["NumberOfHours"]
         })
-tables_dic[projectlist1_table]["data"].append({
-    "IDP": 1,
-    "NumberOfHours": 10
-})
-tables_dic[projectlist1_table]["data"].append({
-    "IDP": 3,
-    "NumberOfHours": 15, 
-})
-tables_dic[projectlist2_table]["data"].append({
-    "IDP": 1,
-    "Title": "'Bitsplanet'" ,
-    "NumberOfHours": 10
-})
-tables_dic[employeelist1_table]["data"].append({
-    "IDE": 1,
-    "NumberOfHours": 10,
-    "WagesPerHour": 1000, 
-})
-tables_dic[employeelist2_table]["data"].append({
-    "IDE": 1,
-    "Name": "'Enoch'",
-    "NumberOfHours": 10,
-    "WagesPerHour": 1000, 
-})
 for employee_id, assigned_projects in employees_assignments.items():
     assigned_project_string = ""
     for project in assigned_projects:
@@ -237,17 +213,6 @@ for employee_id, assigned_projects in employees_assignments.items():
         "WagesPerHour": employees[employee_id]["WagesPerHour"],
         "AssignedProjects": f"ARRAY[{assigned_project_string[0:-1]}]::" + projectlist2_table + "[]",
     })
-tables_dic[projectass1_table]["data"].append({
-    "IDP": 1,
-    "StartingDate": "'2021-07-8'",
-    "Employees": "ARRAY[ROW(1, 10, 1000), ROW(3, 15, 500)]::" + employeelist1_table + "[]",
-})
-tables_dic[projectass2_table]["data"].append({
-    "IDP": 3,
-    "Title": "'Good'",
-    "StartingDate": 1,
-    "Employees": "ARRAY[ROW(1, 'Enoch', 10, 1000), ROW(3, 'David', 15, 500)]::" + employeelist2_table + "[]",
-})
 for key, values in tables_dic.items():
     for value in values["data"]:
         postgresSQLManager.insert_data(key, value)
@@ -256,5 +221,4 @@ for key, values in tables_dic.items():
 for key, values in tables_dic.items():
     postgresSQLManager.get_table_data(key)
 
-# postgresSQLManager.print_cur()
 postgresSQLManager.close()
