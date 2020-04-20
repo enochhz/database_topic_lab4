@@ -29,6 +29,7 @@ query_runner("query7", "SELECT IDE, Name, IDP, Title, SUM(NumberOfHours) * Wages
             "FROM (SELECT IDE, Name, WagesPerHour, " + 
             "(unnest(AssignedProjects)::ProjectList2).IDP, (unnest(AssignedProjects)::ProjectList2).Title, (unnest(AssignedProjects)::ProjectList2).NumberOfHours FROM EmpAss2) As EmpAss " + 
             "GROUP BY IDE, Name, IDP, Title, WagesPerHour")
-query_runner("query8", "SELECT Employee.IDE, Employee.Name, EmpAss.IDP, SUM(EmpAss.NumberOfHours) * Employee.WagesPerHour " + 
-            "FROM Employee LEFT JOIN (SELECT IDE, WagesPerHour, (unnest(AssignedProjects)::ProjectList1).IDP, (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) As EmpAss ON Employee.IDE = EmpAss.IDE " + 
-            "GROUP BY Employee.IDE, Employee.WagesPerHour, EmpAss.IDP")
+query_runner("query8", "SELECT Employee.IDE, Employee.Name, EmpAss.IDP, Project.Title, SUM(EmpAss.NumberOfHours) * Employee.WagesPerHour " + 
+            "FROM Employee LEFT JOIN (SELECT IDE, WagesPerHour, (unnest(AssignedProjects)::ProjectList1).IDP, (unnest(AssignedProjects)::ProjectList1).NumberOfHours FROM EmpAss1) As EmpAss " + 
+            "INNER JOIN Project ON EmpAss.IDP = Project.IDP ON Employee.IDE = EmpAss.IDE " + 
+            "GROUP BY Employee.IDE, Employee.WagesPerHour, EmpAss.IDP, Project.Title")
